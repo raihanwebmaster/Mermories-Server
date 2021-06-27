@@ -44,7 +44,7 @@ export const getPost = async (req, res) => {
 }
 
 export const createPost = async (req, res) => {
-    const post = req.body;
+    const post = req.body
 
     const newPostMessage = new PostMessage({ ...post, creator: req.userId , createdAt: new Date().toISOString()})
 
@@ -96,6 +96,16 @@ export const likePost = async (req, res) => {
     const updatedPost = await PostMessage.findByIdAndUpdate(id, post, { new: true });
     
     res.json(updatedPost);
+}
+
+export const commentPost = async (req, res) => {
+    const {id } = req.params;
+    const {value} = req.body;
+    const post = await PostMessage.findById(id);
+    post.comments.push(value);
+    const updatedPost = await PostMessage.findByIdAndUpdate(id, post , {new: true});
+    res.json(updatedPost)
+
 }
 
 
